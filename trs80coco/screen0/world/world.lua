@@ -49,7 +49,7 @@ end
 
 function M.get_character(character_id)
     local character_data = data.characters[character_id]
-     
+
     local character = {}
     character.character_id = character_id
 
@@ -60,7 +60,7 @@ end
 
 function M.get_room(room_id)
     local room_data = data.rooms[room_id]
-     
+
     local room = {}
     room.room_id = room_id
 
