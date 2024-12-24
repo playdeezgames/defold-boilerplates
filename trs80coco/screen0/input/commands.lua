@@ -1,0 +1,24 @@
+local M = {}
+M.ZERO = "ZERO"
+M.ONE = "ONE"
+M.TWO = "TWO"
+M.THREE = "THREE"
+M.FOUR = "FOUR"
+M.FIVE = "FIVE"
+M.SIX = "SIX"
+M.SEVEN = "SEVEN"
+M.EIGHT = "EIGHT"
+M.NINE = "NINE"
+M.ALL = {
+	M.ZERO,
+	M.ONE,
+	M.TWO,
+	M.THREE,
+	M.FOUR,
+	M.FIVE,
+	M.SIX,
+	M.SEVEN,
+	M.EIGHT,
+	M.NINE
+}
+return M

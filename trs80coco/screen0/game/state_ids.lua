@@ -1,0 +1,6 @@
+local M = {}
+M.TITLE = "TITLE"
+M.NEUTRAL = "NEUTRAL"
+M.EMBARK = "EMBARK"
+M.NAVIGATION = "NAVIGATION"
+return M
