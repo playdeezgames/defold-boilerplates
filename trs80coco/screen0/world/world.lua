@@ -4,21 +4,24 @@ local directions = require("world.enums.directions")
 local M = {}
 
 local function construct_route(route, route_data)
+    function route:get_direction()
+        return route_data.direction
+    end
 end
 
 local function construct_room(room, room_data)
     function room:create_route(direction, destination_room)
-        local route_id = #room_data.routes + 1
-        room_data[route_id]={}
+        local route_id = #(room_data.routes) + 1
+        room_data.routes[route_id]={}
 
-        local route_data = room_data[route_id]
+        local route_data = room_data.routes[route_id]
         route_data.direction = direction
         route_data.destination_room = destination_room.room_id
 
         return self:get_route(route_id)
     end
     function room:get_route(route_id)
-        local route_data = room_data[route_id]
+        local route_data = room_data.routes[route_id]
 
         local route = {}
         route.route_id = route_id
@@ -27,9 +30,21 @@ local function construct_room(room, room_data)
 
         return route
     end
+    function room:get_routes()
+        local routes = {}
+        for route_id,route in ipairs(room_data.routes) do
+            if route ~= nil then
+                table.insert(routes, self:get_route(route_id))
+            end
+        end
+        return routes
+    end
 end
 
 local function construct_character(character, character_data)
+    function character:get_room()
+        return M.get_room(character_data.room)
+    end
 end
 
 function M.get_character(character_id)
@@ -55,7 +70,7 @@ function M.get_room(room_id)
 end
 
 function M.create_room()
-    local room_id = #data.rooms + 1
+    local room_id = #(data.rooms) + 1
     data.rooms[room_id] = {}
 
     local room_data = data.rooms[room_id]
@@ -65,7 +80,7 @@ function M.create_room()
 end
 
 function M.create_character(room)
-    local character_id = #data.characters + 1
+    local character_id = #(data.characters) + 1
     data.characters[character_id]={}
 
     local character_data = data.characters[character_id]
