@@ -5,7 +5,7 @@ local M = {}
 
 local function construct_route(route, route_data)
     function route:get_direction()
-        return route_data.direction
+        return route_data.direction_id
     end
     function route:get_destination_room()
         return M.get_room(route_data.destination_room_id)
@@ -18,7 +18,7 @@ local function construct_room(room, room_data)
         room_data.routes[route_id]={}
 
         local route_data = room_data.routes[route_id]
-        route_data.direction = direction
+        route_data.direction_id = direction
         route_data.destination_room_id = destination_room.room_id
 
         return self:get_route(route_id)
