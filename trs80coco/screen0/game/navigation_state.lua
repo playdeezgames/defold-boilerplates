@@ -13,6 +13,7 @@ function M.update(dt)
     local avatar = world.get_avatar()
     assert(avatar, "avatar should not be nil here")
     local room = avatar:get_room()
+    display_buffer.write_line("ROOM: "..room.room_id, 1)
     local routes = room:get_routes()
     if #routes > 0 then
         display_buffer.write_line("EXITS:", 1)
@@ -30,6 +31,9 @@ function M.update(dt)
 end
 
 function M.handle_command(command)
+    if command == commands.ONE then
+        states.set_current(state_ids.MOVE)
+    end
 end
 
 return M

@@ -7,6 +7,7 @@ local game_states={}
 game_states[state_ids.TITLE] = require("game.title_state")
 game_states[state_ids.EMBARK] = require("game.embark_state")
 game_states[state_ids.NAVIGATION] = require("game.navigation_state")
+game_states[state_ids.MOVE] = require("game.move_state")
 
 function M.update(dt)
 	game_states[states.get_current()].update(dt)

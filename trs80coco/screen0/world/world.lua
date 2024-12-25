@@ -7,6 +7,9 @@ local function construct_route(route, route_data)
     function route:get_direction()
         return route_data.direction
     end
+    function route:get_destination_room()
+        return M.get_room(route_data.destination_room_id)
+    end
 end
 
 local function construct_room(room, room_data)
@@ -16,7 +19,7 @@ local function construct_room(room, room_data)
 
         local route_data = room_data.routes[route_id]
         route_data.direction = direction
-        route_data.destination_room = destination_room.room_id
+        route_data.destination_room_id = destination_room.room_id
 
         return self:get_route(route_id)
     end
@@ -98,6 +101,10 @@ local function construct_character(character, character_data)
         local room = self:get_room()
         if room==nil then return false end
         return room:has_routes()
+    end
+    function character:take_route(route)
+        if route == nil then return end
+        self:set_room(route:get_destination_room())
     end
 end
 
