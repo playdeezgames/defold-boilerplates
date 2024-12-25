@@ -165,10 +165,14 @@ function M.get_avatar()
     return M.get_character(data.avatar_id)
 end
 
-function M.initialize()
+function M.abandon()
     data.rooms = {}
     data.characters = {}
     data.avatar_id = nil
+end
+
+function M.initialize()
+    M.abandon()
 
     local room1 = M.create_room()
 

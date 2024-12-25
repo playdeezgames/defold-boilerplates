@@ -33,6 +33,8 @@ end
 function M.handle_command(command)
     if command == commands.ONE then
         states.set_current(state_ids.MOVE)
+    elseif command == commands.ZERO then
+        states.set_current(state_ids.GAME_MENU)
     end
 end
 
