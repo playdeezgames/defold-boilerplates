@@ -39,11 +39,52 @@ local function construct_room(room, room_data)
         end
         return routes
     end
+    function room:add_character(character)
+        if character==nil then
+            return
+        end
+        self:remove_character(character)
+        table.insert(room_data.characters, character.character_id)
+    end
+    function room:remove_character(character)
+        if character==nil then
+            return
+        end
+        local new_characters = {}
+        for _,character_id in ipairs(room_data.characters) do
+            if character_id ~= character.character_id then
+                table.insert(new_characters, character_id)
+            end
+        end
+        room_data.characters = new_characters
+    end
+    function room:get_characters()
+        local result = {}
+        for _,character_id in room_data.characters do
+            table.insert(result, M.get_character(character_id))
+        end
+        return result
+    end
 end
 
 local function construct_character(character, character_data)
+    function character:set_room(room)
+        local old_room = self:get_room()
+        if old_room~=nil then
+            old_room:remove_character(self)
+        end
+        if room == nil then
+            character_data.room_id = nil
+        else
+            character_data.room_id = room.room_id
+            room:add_character(self)
+        end
+    end
     function character:get_room()
-        return M.get_room(character_data.room)
+        if character_data.room_id==nil then
+            return nil
+        end
+        return M.get_room(character_data.room_id)
     end
 end
 
@@ -75,6 +116,7 @@ function M.create_room()
 
     local room_data = data.rooms[room_id]
     room_data.routes={}
+    room_data.characters={}
 
     return M.get_room(room_id)
 end
@@ -83,10 +125,9 @@ function M.create_character(room)
     local character_id = #(data.characters) + 1
     data.characters[character_id]={}
 
-    local character_data = data.characters[character_id]
-    character_data.room = room.room_id
-
-    return M.get_character(character_id)
+    local result = M.get_character(character_id)
+    result:set_room(room)
+    return result
 end
 
 function M.set_avatar(character)
