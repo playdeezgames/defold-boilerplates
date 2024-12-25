@@ -65,6 +65,14 @@ local function construct_room(room, room_data)
         end
         return result
     end
+    function room:has_routes()
+        for _,route in ipairs(room_data.routes) do
+            if route ~= nil then
+                return true
+            end
+        end
+        return false
+    end
 end
 
 local function construct_character(character, character_data)
@@ -85,6 +93,11 @@ local function construct_character(character, character_data)
             return nil
         end
         return M.get_room(character_data.room_id)
+    end
+    function character:can_move()
+        local room = self:get_room()
+        if room==nil then return false end
+        return room:has_routes()
     end
 end
 
