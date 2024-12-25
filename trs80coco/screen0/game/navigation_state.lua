@@ -18,7 +18,7 @@ function M.update(dt)
     if #routes > 0 then
         display_buffer.write_line("EXITS:", 1)
         for _,route in ipairs(routes) do
-            display_buffer.write_line(route:get_direction(), 1)
+            display_buffer.write_line(route:get_direction():get_name(), 1)
         end
     end
     display_buffer.write_line(" ", 1)

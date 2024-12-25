@@ -5,7 +5,7 @@ local M = {}
 
 local function construct_route(route, route_data)
     function route:get_direction()
-        return route_data.direction_id
+        return directions.descriptors[route_data.direction_id]
     end
     function route:get_destination_room()
         return M.get_room(route_data.destination_room_id)

@@ -17,7 +17,7 @@ function M.update(dt)
     local routes = room:get_routes()
     for index,route in ipairs(routes) do
         display_buffer.write(index..")", 2)
-        display_buffer.write_line(" "..route:get_direction(), 1)
+        display_buffer.write_line(" "..route:get_direction():get_name(), 1)
     end
     display_buffer.write("0)", 2)
     display_buffer.write_line(" NEVER MIND", 1)
