@@ -19,7 +19,7 @@ function M.update(dt)
 			display_buffer.write(", ", 1)
 		end
 		is_first = false
-		display_buffer.write("#"..enemy.character_id, 1)
+		display_buffer.write(enemy:get_name(), 1)
 	end
 	display_buffer.write_line(" ", 1)
 	display_buffer.write("1)", 2)

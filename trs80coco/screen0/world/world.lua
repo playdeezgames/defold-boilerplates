@@ -104,6 +104,12 @@ local function construct_character(character, character_data)
         --TODO: attack
         --TODO: counter attack
     end
+    function character:set_name(name)
+        character_data.name = name
+    end
+    function character:get_name()
+        return character_data.name
+    end
     function character:run()
         if not self:has_enemies() or not self:can_move() then return end
         --TODO: attacks of opportunity from enemies
@@ -295,8 +301,10 @@ function M.initialize()
     player_faction:set_enemy(monster_faction, true)
 
     local goblin_enemy = M.create_character(room1, monster_faction)
+    goblin_enemy:set_name("goblin")
 
     local avatar_character = M.create_character(room2, player_faction)
+    avatar_character:set_name("n00b")
     M.set_avatar(avatar_character)
 end
 
