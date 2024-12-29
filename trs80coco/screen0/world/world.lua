@@ -30,6 +30,9 @@ local function construct_room(room, room_data)
         end
         return enemies
     end
+    function room:get_description()
+        return room_data.description
+    end
     function room:create_route(direction, destination_room)
         local route_id = #(room_data.routes) + 1
         room_data.routes[route_id]={}
@@ -207,11 +210,12 @@ function M.get_room(room_id)
     return room
 end
 
-function M.create_room()
+function M.create_room(description)
     local room_id = #(data.rooms) + 1
     data.rooms[room_id] = {}
-
+    
     local room_data = data.rooms[room_id]
+    room_data.description = description
     room_data.routes={}
     room_data.characters={}
 
@@ -275,13 +279,13 @@ end
 function M.initialize()
     M.abandon()
 
-    local room1 = M.create_room()
+    local room1 = M.create_room("A 15'x15' CHAMBER")
 
-    local room2 = M.create_room()
+    local room2 = M.create_room("A 30'x35' CHAMBER")
     room1:create_route(directions.SOUTH, room2)
     room2:create_route(directions.NORTH, room1)
 
-    local room3 = M.create_room()
+    local room3 = M.create_room("A 15'x15' CHAMBER")
     room2:create_route(directions.SOUTH, room3)
     room3:create_route(directions.NORTH, room2)
 

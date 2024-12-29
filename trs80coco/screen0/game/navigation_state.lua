@@ -13,7 +13,7 @@ function M.update(dt)
     local avatar = world.get_avatar()
     assert(avatar, "avatar should not be nil here")
     local room = avatar:get_room()
-    display_buffer.write_line("ROOM: "..room.room_id, 1)
+    display_buffer.write_line("YER IN: "..room:get_description(), 1)
     local routes = room:get_routes()
     if #routes > 0 then
         display_buffer.write_line("EXITS:", 1)
