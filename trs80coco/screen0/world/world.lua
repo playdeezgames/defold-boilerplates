@@ -99,6 +99,24 @@ local function construct_room(room, room_data)
 end
 
 local function construct_character(character, character_data)
+    function character:set_attack_dice(attack_dice)
+        character_data.statistics.attack_dice = attack_dice
+    end
+    function character:set_maximum_attack(maximum_attack)
+        character_data.statistics.maximum_attack = maximum_attack
+    end
+    function character:set_defend_dice(defend_dice)
+        character_data.statistics.defend_dice = defend_dice
+    end
+    function character:set_maximum_defend(maximum_defend)
+        character_data.statistics.maximum_defend = maximum_defend
+    end
+    function character:set_health(health)
+        character_data.statistics.health = health
+    end
+    function character:set_maximum_health(maximum_health)
+        character_data.statistics.maximum_health = maximum_health
+    end
     function character:fight()
         if not self:has_enemies() then return end
         --TODO: attack
@@ -199,6 +217,8 @@ function M.get_character(character_id)
 
     local character = {}
     character.character_id = character_id
+
+    character_data.statistics = {}
 
     construct_character(character, character_data)
 
@@ -302,9 +322,21 @@ function M.initialize()
 
     local goblin_enemy = M.create_character(room1, monster_faction)
     goblin_enemy:set_name("goblin")
+    goblin_enemy:set_attack_dice(4)
+    goblin_enemy:set_maximum_attack(2)
+    goblin_enemy:set_defend_dice(1)
+    goblin_enemy:set_maximum_defend(1)
+    goblin_enemy:set_health(1)
+    goblin_enemy:set_maximum_health(1)
 
     local avatar_character = M.create_character(room2, player_faction)
     avatar_character:set_name("n00b")
+    avatar_character:set_attack_dice(1)
+    avatar_character:set_maximum_attack(1)
+    avatar_character:set_defend_dice(4)
+    avatar_character:set_maximum_defend(2)
+    avatar_character:set_health(5)
+    avatar_character:set_maximum_health(5)
     M.set_avatar(avatar_character)
 end
 
