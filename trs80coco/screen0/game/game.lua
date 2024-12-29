@@ -10,6 +10,7 @@ game_states[state_ids.NAVIGATION] = require("game.navigation_state")
 game_states[state_ids.MOVE] = require("game.move_state")
 game_states[state_ids.GAME_MENU] = require("game.game_menu_state")
 game_states[state_ids.CONFIRM_ABANDON] = require("game.confirm_abandon_state")
+game_states[state_ids.COMBAT] = require("game.combat_state")
 
 function M.update(dt)
 	game_states[states.get_current()].update(dt)

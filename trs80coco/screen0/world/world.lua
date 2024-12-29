@@ -13,6 +13,23 @@ local function construct_route(route, route_data)
 end
 
 local function construct_room(room, room_data)
+    function room:has_enemies(character)
+        for _,candidate in ipairs(self:get_characters()) do
+            if candidate:is_enemy(character) then
+                return true
+            end
+        end
+        return false
+    end
+    function room:get_enemies(character)
+        local enemies = {}
+        for _,candidate in ipairs(self:get_characters()) do
+            if candidate:is_enemy(character) then
+                table.insert(enemies, candidate)
+            end
+        end
+        return enemies
+    end
     function room:create_route(direction, destination_room)
         local route_id = #(room_data.routes) + 1
         room_data.routes[route_id]={}
@@ -63,7 +80,7 @@ local function construct_room(room, room_data)
     end
     function room:get_characters()
         local result = {}
-        for _,character_id in room_data.characters do
+        for _,character_id in ipairs(room_data.characters) do
             table.insert(result, M.get_character(character_id))
         end
         return result
@@ -79,6 +96,26 @@ local function construct_room(room, room_data)
 end
 
 local function construct_character(character, character_data)
+    function character:is_enemy(other_character)
+        if other_character:get_faction():is_enemy(self:get_faction()) then
+            return true
+        end
+    end
+    function character:set_faction(faction)
+        character_data.faction_id = faction.faction_id
+    end
+    function character:get_faction()
+        if character_data.faction_id ~= nil then
+            return M.get_faction(character_data.faction_id)
+        end
+        return nil
+    end
+    function character:has_enemies()
+        return self:get_room():has_enemies(self)
+    end
+    function character:get_enemies()
+        return self:get_room():get_enemies(self)
+    end
     function character:set_room(room)
         local old_room = self:get_room()
         if old_room~=nil then
@@ -107,6 +144,33 @@ local function construct_character(character, character_data)
         self:set_room(route:get_destination_room())
     end
 end
+
+
+local function construct_faction(faction, faction_data)
+    function faction:set_enemy(other_faction, is_enemy)
+        if is_enemy then
+            self:set_enemy(other_faction, false)
+            table.insert(faction_data.enemies, other_faction.faction_id)
+        else
+            local new_enemies = {}
+            for _, faction_id in ipairs(faction_data.enemies) do
+                if faction_id ~= other_faction.faction_id then
+                    table.insert(new_enemies, faction_id)
+                end
+            end
+            faction_data.enemies = new_enemies
+        end
+    end
+    function faction:is_enemy(other_faction)
+        for _, faction_id in ipairs(faction_data.enemies) do
+            if faction_id == other_faction.faction_id then
+                return true
+            end
+        end
+        return false
+    end
+end
+
 
 function M.get_character(character_id)
     local character_data = data.characters[character_id]
@@ -141,12 +205,35 @@ function M.create_room()
     return M.get_room(room_id)
 end
 
-function M.create_character(room)
+function M.create_character(room, faction)
     local character_id = #(data.characters) + 1
     data.characters[character_id]={}
 
     local result = M.get_character(character_id)
     result:set_room(room)
+    result:set_faction(faction)
+    return result
+end
+
+function M.get_faction(faction_id)
+    local faction_data = data.factions[faction_id]
+
+    local faction = {}
+    faction.faction_id = faction_id
+
+    construct_faction(faction, faction_data)
+
+    return faction
+end
+
+function M.create_faction()
+    local faction_id = #(data.factions) + 1
+    data.factions[faction_id] = {}
+
+    local faction_data = data.factions[faction_id]
+    faction_data.enemies = {}
+
+    local result = M.get_faction(faction_id)
     return result
 end
 
@@ -168,6 +255,7 @@ end
 function M.abandon()
     data.rooms = {}
     data.characters = {}
+    data.factions = {}
     data.avatar_id = nil
 end
 
@@ -184,7 +272,14 @@ function M.initialize()
     room2:create_route(directions.SOUTH, room3)
     room3:create_route(directions.NORTH, room2)
 
-    local avatar_character = M.create_character(room2)
+    local monster_faction = M.create_faction()
+    local player_faction = M.create_faction()
+    monster_faction:set_enemy(player_faction, true)
+    player_faction:set_enemy(monster_faction, true)
+
+    local goblin_enemy = M.create_character(room1, monster_faction)
+
+    local avatar_character = M.create_character(room2, player_faction)
     M.set_avatar(avatar_character)
 end
 
