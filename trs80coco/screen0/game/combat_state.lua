@@ -29,6 +29,13 @@ function M.update(dt)
 end
 
 function M.handle_command(command)
+	if command == commands.ONE then
+		world.get_avatar():fight()
+		states.set_current(state_ids.NEUTRAL)
+	elseif command == commands.ZERO then
+		world.get_avatar():run()
+		states.set_current(state_ids.NEUTRAL)
+	end
 end
 
 return M

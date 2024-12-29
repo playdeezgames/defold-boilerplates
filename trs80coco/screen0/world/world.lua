@@ -96,6 +96,19 @@ local function construct_room(room, room_data)
 end
 
 local function construct_character(character, character_data)
+    function character:fight()
+        if not self:has_enemies() then return end
+        --TODO: attack
+        --TODO: counter attack
+    end
+    function character:run()
+        if not self:has_enemies() or not self:can_move() then return end
+        --TODO: attacks of opportunity from enemies
+        local routes = self:get_room():get_routes()
+        local route = routes[math.random(1, #routes)]
+        --TODO: message about running
+        self:take_route(route)
+    end
     function character:is_enemy(other_character)
         if other_character:get_faction():is_enemy(self:get_faction()) then
             return true
