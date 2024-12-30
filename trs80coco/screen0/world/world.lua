@@ -4,6 +4,7 @@ local characters = require("world.characters")
 local rooms = require("world.rooms")
 local factions = require("world.factions")
 local character_types = require("world.enums.character_types")
+local initializer = require("world.initializer")
 
 local M = {}
 
@@ -98,26 +99,7 @@ end
 
 function M.initialize()
     M.abandon()
-
-    local room1 = M.create_room("A 15'x15' CHAMBER")
-
-    local room2 = M.create_room("A 30'x35' CHAMBER")
-    room1:create_route(directions.SOUTH, room2)
-    room2:create_route(directions.NORTH, room1)
-
-    local room3 = M.create_room("A 15'x15' CHAMBER")
-    room2:create_route(directions.SOUTH, room3)
-    room3:create_route(directions.NORTH, room2)
-
-    local monster_faction = M.create_faction()
-    local player_faction = M.create_faction()
-    monster_faction:set_enemy(player_faction, true)
-    player_faction:set_enemy(monster_faction, true)
-
-    local goblin_enemy = M.create_character(room1, monster_faction, character_types.GOBLIN)
-
-    local avatar_character = M.create_character(room2, player_faction, character_types.N00B)
-    M.set_avatar(avatar_character)
+    initializer.initialize(M)
 end
 
 return M
