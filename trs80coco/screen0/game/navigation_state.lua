@@ -26,6 +26,8 @@ function M.update(dt)
         display_buffer.write("1)", 2)
         display_buffer.write_line(" MOVE", 1)
     end
+    display_buffer.write("9)", 2)
+    display_buffer.write_line(" STATISTICS", 1)
     display_buffer.write("0)", 2)
     display_buffer.write_line(" GAME MENU", 1)
 end
@@ -33,6 +35,8 @@ end
 function M.handle_command(command)
     if command == commands.ONE then
         states.set_current(state_ids.MOVE)
+    elseif command == commands.NINE then
+        states.set_current(state_ids.STATISTICS)
     elseif command == commands.ZERO then
         states.set_current(state_ids.GAME_MENU)
     end
