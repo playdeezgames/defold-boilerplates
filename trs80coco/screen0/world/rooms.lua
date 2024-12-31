@@ -2,6 +2,12 @@ local routes = require("world.routes")
 local M = {}
 
 function M.construct(world, room, room_data)
+    function room:set_inventory(inventory)
+        room_data.inventory_id = inventory.inventory_id
+    end
+    function room:get_inventory()
+        return world.get_inventory(room_data.inventory_id)
+    end
     function room:has_enemies(character)
         for _,candidate in ipairs(self:get_characters()) do
             if candidate:is_enemy(character) then

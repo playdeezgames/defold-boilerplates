@@ -5,6 +5,7 @@ local factions = require("world.factions")
 local character_types = require("world.enums.character_types")
 local initializer = require("world.initializer")
 local messages = require("world.messages")
+local inventories = require("world.inventories")
 
 local M = {}
 
@@ -30,6 +31,25 @@ function M.get_room(room_id)
     return room
 end
 
+function M.get_inventory(inventory_id)
+    local inventory_data = data.inventories[inventory_id]
+
+    local inventory = {}
+    inventory.inventory_id = inventory_id
+
+    inventories.construct(M, inventory, inventory_data)
+
+    return inventory
+end
+
+function M.create_inventory()
+    local inventory_id = #(data.inventories) + 1
+    data.inventories[inventory_id] = {}
+
+    local inventory = M.get_inventory(inventory_id)
+    return inventory
+end
+
 function M.create_room(description)
     local room_id = #(data.rooms) + 1
     data.rooms[room_id] = {}
@@ -39,7 +59,9 @@ function M.create_room(description)
     room_data.routes={}
     room_data.characters={}
 
-    return M.get_room(room_id)
+    local room = M.get_room(room_id)
+    room:set_inventory(M.create_inventory())
+    return room
 end
 
 function M.create_character(room, faction, character_type)
@@ -57,6 +79,7 @@ function M.create_character(room, faction, character_type)
     local result = M.get_character(character_id)
     result:set_room(room)
     result:set_faction(faction)
+    result:set_inventory(M.create_inventory())
     character_types.initialize(result, character_type)
     return result
 end
@@ -103,6 +126,7 @@ function M.abandon()
     data.characters = {}
     data.factions = {}
     data.messages = {}
+    data.inventories = {}
     data.avatar_id = nil
 end
 

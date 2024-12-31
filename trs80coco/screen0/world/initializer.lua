@@ -9,6 +9,7 @@ function M.initialize(world)
     local room2 = world.create_room("A 30'x35' CHAMBER")
     room1:create_route(directions.SOUTH, room2)
     room2:create_route(directions.NORTH, room1)
+    --TODO: put sword in room 2
 
     local room3 = world.create_room("A 15'x15' CHAMBER")
     room2:create_route(directions.SOUTH, room3)
@@ -20,6 +21,7 @@ function M.initialize(world)
     player_faction:set_enemy(monster_faction, true)
 
     world.create_character(room1, monster_faction, character_types.GOBLIN)
+    --TODO: give key to goblin
 
     local avatar_character = world.create_character(room2, player_faction, character_types.N00B)
     world.set_avatar(avatar_character)

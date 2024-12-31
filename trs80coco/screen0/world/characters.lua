@@ -11,6 +11,12 @@ local function roll_dice(dice, maximum)
 end
 
 function M.construct(world, character, character_data)
+    function character:set_inventory(inventory)
+        character_data.inventory_id = inventory.inventory_id
+    end
+    function character:get_inventory()
+        return world.get_inventory(character_data.inventory_id)
+    end
     function character:set_attack_dice(attack_dice)
         character_data.statistics.attack_dice = attack_dice
     end
