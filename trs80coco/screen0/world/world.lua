@@ -1,10 +1,10 @@
 local data = require("data.data")
-local directions = require("world.enums.directions")
 local characters = require("world.characters")
 local rooms = require("world.rooms")
 local factions = require("world.factions")
 local character_types = require("world.enums.character_types")
 local initializer = require("world.initializer")
+local messages = require("world.messages")
 
 local M = {}
 
@@ -43,7 +43,15 @@ function M.create_room(description)
 end
 
 function M.create_character(room, faction, character_type)
-    local character_id = #(data.characters) + 1
+    local character_id = nil
+    for index, candidate in ipairs(data.characters) do
+        if candidate == nil then
+            character_id = index
+            break
+        end
+    end
+    
+    character_id = character_id or (#(data.characters) + 1)
     data.characters[character_id]={statistics={}}
 
     local result = M.get_character(character_id)
@@ -94,12 +102,53 @@ function M.abandon()
     data.rooms = {}
     data.characters = {}
     data.factions = {}
+    data.messages = {}
     data.avatar_id = nil
 end
 
 function M.initialize()
     M.abandon()
     initializer.initialize(M)
+end
+
+function M.has_messages()
+    return #data.messages > 0
+end
+
+function M.dismiss_message()
+    if M.has_messages() then
+        table.remove(data.messages, 1)
+    end
+end
+
+function M.get_message(message_id)
+    local message_data = data.messages[message_id]
+
+    local message = {}
+    message.message_id = message_id
+
+    messages.construct(M, message, message_data)
+
+    return message
+end
+
+function M.recycle_character(character)
+    data.characters[character.character_id] = nil
+end
+
+function M.get_next_message()
+    if M.has_messages() then
+        return M.get_message(1)
+    end
+    return nil
+end
+
+function M.create_message()
+    local message_id = #(data.messages) + 1
+    data.messages[message_id]={}
+
+    local result = M.get_message(message_id)
+    return result
 end
 
 return M

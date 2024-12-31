@@ -8,7 +8,7 @@ local M = {}
 
 function M.update(dt)
 	display_buffer.clear(97)
-	display_buffer.write_line("BOILERPLATE!", 2)
+	display_buffer.write_line("SAMPLE DUNGEON OF SPLORR!!", 2)
 	display_buffer.write_line("A PRODUCTION OF THEGRUMPYGAMEDEV", 1)
 	display_buffer.write_line(" ", 1)
 	--TODO: depending on whether there is an avatar, CONTINUE or EMBARK.

@@ -12,6 +12,8 @@ game_states[state_ids.GAME_MENU] = require("game.game_menu_state")
 game_states[state_ids.CONFIRM_ABANDON] = require("game.confirm_abandon_state")
 game_states[state_ids.COMBAT] = require("game.combat_state")
 game_states[state_ids.STATISTICS] = require("game.statistics_state")
+game_states[state_ids.MESSAGE] = require("game.message_state")
+game_states[state_ids.DEAD] = require("game.dead_state")
 
 function M.update(dt)
 	game_states[states.get_current()].update(dt)

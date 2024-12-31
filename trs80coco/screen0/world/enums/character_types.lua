@@ -9,8 +9,8 @@ local function initialize_goblin(character)
     character:set_maximum_attack(2)
     character:set_defend_dice(1)
     character:set_maximum_defend(1)
-    character:set_health(1)
     character:set_maximum_health(1)
+    character:set_health(1)
 end
 
 local function initialize_avatar(character)
@@ -19,8 +19,8 @@ local function initialize_avatar(character)
     character:set_maximum_attack(1)
     character:set_defend_dice(4)
     character:set_maximum_defend(2)
-    character:set_health(5)
     character:set_maximum_health(5)
+    character:set_health(5)
 end
 
 local initializers = {}
